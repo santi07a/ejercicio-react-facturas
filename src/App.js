@@ -1,3 +1,5 @@
+
+
 function App() {
   return (
     <>
@@ -38,44 +40,14 @@ function App() {
                 <td className="estado"></td>
                 <td className="vencimiento"></td>
               </tr>
-              <tr>
-                <td>1000</td>
-                <td>13/06/2018</td>
-                <td>App Angular</td>
-                <td>3000€</td>
-                <td>630€ (21%)</td>
-                <td>3630€</td>
-                <td className="table-success">Abonada</td>
-                <td className="table-success">-</td>
-              </tr>
-              <tr>
-                <td>1000</td>
-                <td>13/06/2018</td>
-                <td>App Angular</td>
-                <td>3000€</td>
-                <td>630€ (21%)</td>
-                <td>3630€</td>
-                <td className="table-danger">Pendiente</td>
-                <td className="table-danger">28/2/2021 (hace x días)</td>
-              </tr>
-              <tr>
-                <td>1000</td>
-                <td>13/06/2018</td>
-                <td>App Angular</td>
-                <td>3000€</td>
-                <td>630€ (21%)</td>
-                <td>3630€</td>
-                <td className="table-danger">Pendiente</td>
-                <td className="table-success">1/4/2021 (faltan x días)</td>
-              </tr>
             </tbody>
             <tfoot>
               <tr className="totales">
-                <th className="text-right" colspan="3">Totales:</th>
+                <th className="text-right" colSpan="3">Totales:</th>
                 <td><span className="total-bases"></span>€</td>
                 <td><span className="total-ivas"></span>€</td>
                 <td><span className="total-totales"></span>€</td>
-                <td colspan="2"></td>
+                <td colSpan="2"></td>
               </tr>
             </tfoot>
           </table>
