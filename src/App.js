@@ -1,4 +1,5 @@
 import { Col, Container, Form, FormControl, Row, Table, ToastHeader } from "react-bootstrap";
+import Buscador from "./componentes/Buscador";
 
 function App() {
   return (
