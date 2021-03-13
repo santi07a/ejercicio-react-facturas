@@ -1,19 +1,23 @@
 import { Col, Container, Form, FormControl, Row, Table, ToastHeader } from "react-bootstrap";
 import Buscador from "./componentes/Buscador";
 import { DateTime } from "luxon";
-import Facturas from "./componentes/Facturas";
+import Factura from "./componentes/Factura";
 import Totales from "./componentes/Totales";
 import { useEffect, useState } from "react";
-import useFetch from "../hooks/useFetch";
+import useFetch from "./hooks/useFetch";
+
+const urlFacturas = "http://localhost:3001/facturas";
 
 function App() {
   const [facturas, setFacturas] = useState([]);
-  const { datos: facturasAPI } = useFetch(`${process.env.REACT_APP_API_URL}`);
+  /* const { datos: facturasAPI } = useFetch(`${process.env.REACT_APP_API_URL}`); */
+  const { datos: facturasAPI } = useFetch(urlFacturas);
   useEffect(() => {
     if (facturasAPI) {
       setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
     }
   }, [facturasAPI]);
+  console.log(facturas);
   const { DateTime } = require("luxon");
   const cantidadIVA = (base, tipoIVA) => base * (tipoIVA / 100);
   const verificaVencimiento = (fechaHoy, fechaVencimiento) => {
@@ -29,9 +33,9 @@ function App() {
     const difFechas = fechaVencimiento.diff(fechaHoy, "days").toObject();
     const diasDif = Math.abs(Math.trunc(difFechas.days));
     if (verificaVencimiento(fechaHoy, fechaVencimiento)) {
-      return `${fechaVencimiento.toLocaleString()} (faltan ${diasDif} días)`;
+      return `${fechaVencimiento.setLocale("es").toLocaleString()} (faltan ${diasDif} días)`;
     } else {
-      return `${fechaVencimiento.toLocaleString()} (hace ${diasDif} días)`;
+      return `${fechaVencimiento.setLocale("es").toLocaleString()} (hace ${diasDif} días)`;
     }
   };
 
@@ -62,12 +66,17 @@ function App() {
                 <th className="col-max">Vence</th>
               </tr>
             </thead>
-            <Facturas
-              DateTime={DateTime}
-              facturas={facturas}
-              cantidadIVA={cantidadIVA}
-              verificaVencimiento={verificaVencimiento}
-              compruebaVencimiento={compruebaVencimiento} />
+            <tbody>
+              {
+                facturas.map(factura => <Factura
+                  key={factura.id}
+                  factura={factura}
+                  cantidadIVA={cantidadIVA}
+                  verificaVencimiento={verificaVencimiento}
+                  compruebaVencimiento={compruebaVencimiento}
+                />)
+              }
+            </tbody>
             <Totales />
           </Table>
         </main>
