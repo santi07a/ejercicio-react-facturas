@@ -10,7 +10,6 @@ const urlFacturas = "http://localhost:3001/facturas";
 
 function App() {
   const [facturas, setFacturas] = useState([]);
-  /* const { datos: facturasAPI } = useFetch(`${process.env.REACT_APP_API_URL}`); */
   const { datos: facturasAPI } = useFetch(urlFacturas);
   const [totalBase, setTotalBase] = useState(0);
   const [totalIva, setTotalIva] = useState(0);
