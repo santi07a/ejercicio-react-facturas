@@ -3,6 +3,8 @@ import Buscador from "./componentes/Buscador";
 import { DateTime } from "luxon";
 import Facturas from "./componentes/Facturas";
 import Totales from "./componentes/Totales";
+import { useEffect, useState } from "react";
+import useFetch from "../hooks/useFetch";
 
 function App() {
   const [facturas, setFacturas] = useState([]);
