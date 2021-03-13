@@ -36,8 +36,9 @@ function App() {
   }, [facturasAPI]);
 
   const { DateTime } = require("luxon");
-  const cantidadIVA = (base, tipoIVA) => base * (tipoIVA / 100);
-  const verificaVencimiento = (fechaHoy, fechaVencimiento) => {
+  const verificaVencimiento = (vencimiento) => {
+    const fechaHoy = DateTime.local();
+    const fechaVencimiento = DateTime.fromMillis(+vencimiento);
     if (fechaVencimiento > fechaHoy) {
       return true;
     } else {
@@ -48,11 +49,12 @@ function App() {
     const fechaHoy = DateTime.local();
     const fechaVencimiento = DateTime.fromMillis(+vencimiento);
     const diferenciaFechas = fechaVencimiento.diff(fechaHoy, "days").toObject();
-    const diferenciaDias = Math.abs(Math.trunc(diferenciaFechas.days));
     if (verificaVencimiento(fechaHoy, fechaVencimiento)) {
-      return `${fechaVencimiento.setLocale("es").toLocaleString()} (faltan ${diferenciaDias} días)`;
+      return `${fechaVencimiento.setLocale("es").toLocaleString()} \
+      (faltan ${Math.ceil(diferenciaFechas.days)} días)`;
     } else {
-      return `${fechaVencimiento.setLocale("es").toLocaleString()} (hace ${diferenciaDias} días)`;
+      return `${fechaVencimiento.setLocale("es").toLocaleString()} \
+      (hace ${Math.abs(Math.trunc(diferenciaFechas.days))} días)`;
     }
   };
   const modificaBusqueda = (e) => {
@@ -98,7 +100,6 @@ function App() {
                 facturas.map(factura => <Factura
                   key={factura.id}
                   factura={factura}
-                  cantidadIVA={cantidadIVA}
                   verificaVencimiento={verificaVencimiento}
                   compruebaVencimiento={comprobarVencimiento}
                 />)
