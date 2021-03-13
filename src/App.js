@@ -1,22 +1,55 @@
-
+import { Col, Container, Form, FormControl, Row, Table, ToastHeader } from "react-bootstrap";
+import Buscador from "./componentes/Buscador";
+import { DateTime } from "luxon";
+import Facturas from "./componentes/Facturas";
+import Totales from "./componentes/Totales";
+import { useEffect, useState } from "react";
+import useFetch from "../hooks/useFetch";
 
 function App() {
+  const [facturas, setFacturas] = useState([]);
+  const { datos: facturasAPI } = useFetch(`${process.env.REACT_APP_API_URL}`);
+  useEffect(() => {
+    if (facturasAPI) {
+      setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
+    }
+  }, [facturasAPI]);
+  const { DateTime } = require("luxon");
+  const cantidadIVA = (base, tipoIVA) => base * (tipoIVA / 100);
+  const verificaVencimiento = (fechaHoy, fechaVencimiento) => {
+    if (fechaVencimiento > fechaHoy) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  const compruebaVencimiento = (vencimiento) => {
+    const fechaHoy = DateTime.local();
+    const fechaVencimiento = DateTime.fromMillis(+vencimiento);
+    const difFechas = fechaVencimiento.diff(fechaHoy, "days").toObject();
+    const diasDif = Math.abs(Math.trunc(difFechas.days));
+    if (verificaVencimiento(fechaHoy, fechaVencimiento)) {
+      return `${fechaVencimiento.toLocaleString()} (faltan ${diasDif} días)`;
+    } else {
+      return `${fechaVencimiento.toLocaleString()} (hace ${diasDif} días)`;
+    }
+  };
+
   return (
     <>
-      <section className="principal container-fluid">
-        <header className="cabecera row">
-          <h2 className="col">Listado de ingresos</h2>
-        </header>
+      <Container fluid as="section" className="principal">
+        <Row as="header" className="cabecera">
+          <Col as="h2">
+            Listado de ingresos
+        </Col>
+        </Row>
         <main>
-          <div className="row">
-            <div className="info-listado info-listado-top col text-right">
-              <label>
-                Buscar
-            <input type="text" className="form-control form-control-sm" />
-              </label>
-            </div>
-          </div>
-          <table className="listado table table-striped table-bordered table-hover">
+          <Row>
+            <Col as="div" className="info-listado info-listado-top text-right">
+              <Buscador />
+            </Col>
+          </Row>
+          <Table striped bordered hover className="listado">
             <thead className="thead-light">
               <tr>
                 <th className="col-min">Num.</th>
@@ -29,30 +62,16 @@ function App() {
                 <th className="col-max">Vence</th>
               </tr>
             </thead>
-            <tbody>
-              <tr className="factura factura-dummy">
-                <td className="numero"></td>
-                <td className="fecha"></td>
-                <td className="concepto"></td>
-                <td><span className="base"></span>€</td>
-                <td><span className="cantidad-iva"></span>€ (<span className="tipo-iva"></span>%)</td>
-                <td><span className="total"></span>€</td>
-                <td className="estado"></td>
-                <td className="vencimiento"></td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr className="totales">
-                <th className="text-right" colSpan="3">Totales:</th>
-                <td><span className="total-bases"></span>€</td>
-                <td><span className="total-ivas"></span>€</td>
-                <td><span className="total-totales"></span>€</td>
-                <td colSpan="2"></td>
-              </tr>
-            </tfoot>
-          </table>
+            <Facturas
+              DateTime={DateTime}
+              facturas={facturas}
+              cantidadIVA={cantidadIVA}
+              verificaVencimiento={verificaVencimiento}
+              compruebaVencimiento={compruebaVencimiento} />
+            <Totales />
+          </Table>
         </main>
-      </section>
+      </Container >
       <div className="loading off">
         <img src="img/loading.svg" alt="cargando" />
       </div>
