@@ -14,6 +14,7 @@ function App() {
   const [totalBase, setTotalBase] = useState(0);
   const [totalIva, setTotalIva] = useState(0);
   const [totalTotal, setTotalTotal] = useState(0);
+  const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
     if (facturas.length > 0) {
@@ -33,7 +34,6 @@ function App() {
       setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
     }
   }, [facturasAPI]);
-  console.log(facturas);
 
   const { DateTime } = require("luxon");
   const cantidadIVA = (base, tipoIVA) => base * (tipoIVA / 100);
@@ -55,6 +55,13 @@ function App() {
       return `${fechaVencimiento.setLocale("es").toLocaleString()} (hace ${diferenciaDias} días)`;
     }
   };
+  const modificaBusqueda = (e) => {
+    setBusqueda(e.target.value);
+  };
+  const realizaBusqueda = (e) => {
+    e.preventDefault();
+    setFacturas(facturas.filter(factura => factura.numero === busqueda));
+  };
 
   return (
     <>
@@ -67,7 +74,10 @@ function App() {
         <main>
           <Row>
             <Col as="div" className="info-listado info-listado-top text-right">
-              <Buscador />
+              <Buscador
+                busqueda={busqueda}
+                modificaBusqueda={modificaBusqueda}
+                realizaBusqueda={realizaBusqueda} />
             </Col>
           </Row>
           <Table striped bordered hover className="listado">
