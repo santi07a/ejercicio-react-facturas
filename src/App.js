@@ -1,7 +1,38 @@
 import { Col, Container, Form, FormControl, Row, Table, ToastHeader } from "react-bootstrap";
 import Buscador from "./componentes/Buscador";
+import { DateTime } from "luxon";
+import Facturas from "./componentes/Facturas";
+import Totales from "./componentes/Totales";
 
 function App() {
+  const [facturas, setFacturas] = useState([]);
+  const { datos: facturasAPI } = useFetch(`${process.env.REACT_APP_API_URL}`);
+  useEffect(() => {
+    if (facturasAPI) {
+      setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
+    }
+  }, [facturasAPI]);
+  const { DateTime } = require("luxon");
+  const cantidadIVA = (base, tipoIVA) => base * (tipoIVA / 100);
+  const verificaVencimiento = (fechaHoy, fechaVencimiento) => {
+    if (fechaVencimiento > fechaHoy) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  const compruebaVencimiento = (vencimiento) => {
+    const fechaHoy = DateTime.local();
+    const fechaVencimiento = DateTime.fromMillis(+vencimiento);
+    const difFechas = fechaVencimiento.diff(fechaHoy, "days").toObject();
+    const diasDif = Math.abs(Math.trunc(difFechas.days));
+    if (verificaVencimiento(fechaHoy, fechaVencimiento)) {
+      return `${fechaVencimiento.toLocaleString()} (faltan ${diasDif} días)`;
+    } else {
+      return `${fechaVencimiento.toLocaleString()} (hace ${diasDif} días)`;
+    }
+  };
+
   return (
     <>
       <Container fluid as="section" className="principal">
