@@ -1,6 +1,6 @@
 import { Col, Container, Form, FormControl, Row, Table, ToastHeader } from "react-bootstrap";
 import Buscador from "./componentes/Buscador";
-import { DateTime } from "luxon";
+
 import Factura from "./componentes/Factura";
 import Totales from "./componentes/Totales";
 import { useEffect, useState } from "react";
@@ -12,12 +12,30 @@ function App() {
   const [facturas, setFacturas] = useState([]);
   /* const { datos: facturasAPI } = useFetch(`${process.env.REACT_APP_API_URL}`); */
   const { datos: facturasAPI } = useFetch(urlFacturas);
+  const [totalBase, setTotalBase] = useState(0);
+  const [totalIva, setTotalIva] = useState(0);
+  const [totalTotal, setTotalTotal] = useState(0);
+
+  useEffect(() => {
+    if (facturas.length > 0) {
+      setTotalBase(facturas.map(factura => factura.base).reduce((acc, base) => acc + base));
+      setTotalIva(facturas.map(factura => factura.base * (factura.tipoIva / 100)).reduce((acc, iva) => acc + iva));
+      setTotalTotal(Math.round(facturas.map(factura => factura.base + factura.base * (factura.tipoIva / 100)).reduce((acc, total) => acc + total) * 100) / 100);
+    } else {
+      setTotalBase(0);
+      setTotalIva(0);
+      setTotalTotal(0);
+    }
+  }, [facturas]);
+
+
   useEffect(() => {
     if (facturasAPI) {
       setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
     }
   }, [facturasAPI]);
   console.log(facturas);
+
   const { DateTime } = require("luxon");
   const cantidadIVA = (base, tipoIVA) => base * (tipoIVA / 100);
   const verificaVencimiento = (fechaHoy, fechaVencimiento) => {
@@ -27,15 +45,15 @@ function App() {
       return false;
     }
   };
-  const compruebaVencimiento = (vencimiento) => {
+  const comprobarVencimiento = (vencimiento) => {
     const fechaHoy = DateTime.local();
     const fechaVencimiento = DateTime.fromMillis(+vencimiento);
-    const difFechas = fechaVencimiento.diff(fechaHoy, "days").toObject();
-    const diasDif = Math.abs(Math.trunc(difFechas.days));
+    const diferenciaFechas = fechaVencimiento.diff(fechaHoy, "days").toObject();
+    const diferenciaDias = Math.abs(Math.trunc(diferenciaFechas.days));
     if (verificaVencimiento(fechaHoy, fechaVencimiento)) {
-      return `${fechaVencimiento.setLocale("es").toLocaleString()} (faltan ${diasDif} días)`;
+      return `${fechaVencimiento.setLocale("es").toLocaleString()} (faltan ${diferenciaDias} días)`;
     } else {
-      return `${fechaVencimiento.setLocale("es").toLocaleString()} (hace ${diasDif} días)`;
+      return `${fechaVencimiento.setLocale("es").toLocaleString()} (hace ${diferenciaDias} días)`;
     }
   };
 
@@ -73,11 +91,14 @@ function App() {
                   factura={factura}
                   cantidadIVA={cantidadIVA}
                   verificaVencimiento={verificaVencimiento}
-                  compruebaVencimiento={compruebaVencimiento}
+                  compruebaVencimiento={comprobarVencimiento}
                 />)
               }
             </tbody>
-            <Totales />
+            <Totales
+              totalBase={totalBase}
+              totalIva={totalIva}
+              totalTotal={totalTotal} />
           </Table>
         </main>
       </Container >
