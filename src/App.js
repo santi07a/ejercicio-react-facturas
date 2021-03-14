@@ -6,11 +6,11 @@ import Totales from "./componentes/Totales";
 import { useEffect, useState } from "react";
 import useFetch from "./hooks/useFetch";
 
-const urlFacturas = "http://localhost:3001/facturas";
 
 function App() {
   const [facturas, setFacturas] = useState([]);
-  const { datos: facturasAPI } = useFetch(urlFacturas);
+  const [urlFacturasApi, setUrlFacturasApi] = useState(`${process.env.REACT_APP_API_URL}`);
+  const { datos: facturasAPI } = useFetch(urlFacturasApi);
   const [totalBase, setTotalBase] = useState(0);
   const [totalIva, setTotalIva] = useState(0);
   const [totalTotal, setTotalTotal] = useState(0);
