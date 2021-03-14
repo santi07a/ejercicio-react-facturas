@@ -101,7 +101,7 @@ function App() {
                   key={factura.id}
                   factura={factura}
                   verificaVencimiento={verificaVencimiento}
-                  compruebaVencimiento={comprobarVencimiento}
+                  comprobarVencimiento={comprobarVencimiento}
                 />)
               }
             </tbody>
