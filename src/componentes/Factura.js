@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 
-
 const Factura = (props) => {
   const { factura, verificaVencimiento, compruebaVencimiento } = props;
   return (
