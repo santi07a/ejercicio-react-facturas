@@ -1,5 +1,6 @@
 import { Col, Container, Form, FormControl, Row, Table, ToastHeader } from "react-bootstrap";
 import Buscador from "./componentes/Buscador";
+import { DateTime } from "luxon";
 import Factura from "./componentes/Factura";
 import Totales from "./componentes/Totales";
 import { useEffect, useState } from "react";
@@ -13,6 +14,7 @@ function App() {
   const [totalIva, setTotalIva] = useState(0);
   const [totalTotal, setTotalTotal] = useState(0);
   const [busqueda, setBusqueda] = useState("");
+  const [noHayFacturas, setNoHayFacturas] = useState(false);
 
   useEffect(() => {
     if (facturas.length > 0) {
@@ -29,7 +31,6 @@ function App() {
     }
   }, [facturasAPI]);
 
-  const { DateTime } = require("luxon");
   const verificaVencimiento = (vencimiento) => {
     const fechaHoy = DateTime.local();
     const fechaVencimiento = DateTime.fromMillis(+vencimiento);
@@ -56,7 +57,18 @@ function App() {
   };
   const realizaBusqueda = (e) => {
     e.preventDefault();
-    setFacturas(facturas.filter(factura => factura.numero === busqueda));
+    if (busqueda === "") {
+      setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
+      setNoHayFacturas(false);
+    } else {
+      const facturasCoincidentes = facturas.filter(factura => factura.numero === busqueda);
+      setFacturas(facturasCoincidentes);
+      if (facturasCoincidentes.length === 0) {
+        setNoHayFacturas(true);
+      } else {
+        setNoHayFacturas(false);
+      }
+    }
   };
 
   return (
@@ -90,6 +102,9 @@ function App() {
               </tr>
             </thead>
             <tbody>
+              <tr hidden={!noHayFacturas} className="factura">
+                <th className="text-center" colSpan="8">Ninguna factura coincide con tu búsqueda</th>
+              </tr>
               {
                 facturas.map(factura => <Factura
                   key={factura.id}
