@@ -64,11 +64,12 @@ function App() {
   };
   const realizaBusqueda = (e) => {
     e.preventDefault();
+    const arrayBusquedas = busqueda.split(",").map(factura => factura.replace(" ", ""));
     if (busqueda === "") {
       setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
       setNoHayFacturas(false);
     } else {
-      const facturasCoincidentes = facturasAPI.filter(facturaAPIs => facturaAPIs.numero === busqueda);
+      const facturasCoincidentes = facturasAPI.filter(facturaAPIs => arrayBusquedas.includes(facturaAPIs.numero));
       setFacturas(facturasCoincidentes);
       if (facturasCoincidentes.length === 0) {
         setNoHayFacturas(true);
