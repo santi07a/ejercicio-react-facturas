@@ -5,6 +5,7 @@ import Factura from "./componentes/Factura";
 import Totales from "./componentes/Totales";
 import { useEffect, useState } from "react";
 import useFetch from "./hooks/useFetch";
+import Spinner from "./componentes/Spinner";
 
 function App() {
   const [facturas, setFacturas] = useState([]);
@@ -122,9 +123,7 @@ function App() {
           </Table>
         </main>
       </Container >
-      <div className="loading off">
-        <img src="img/loading.svg" alt="cargando" />
-      </div>
+      <Spinner />
     </>
   );
 }
