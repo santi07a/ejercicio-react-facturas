@@ -62,7 +62,7 @@ function App() {
       setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
       setNoHayFacturas(false);
     } else {
-      const facturasCoincidentes = facturas.filter(factura => factura.numero === busqueda);
+      const facturasCoincidentes = facturasAPI.filter(facturaAPIs => facturaAPIs.numero === busqueda);
       setFacturas(facturasCoincidentes);
       if (facturasCoincidentes.length === 0) {
         setNoHayFacturas(true);
