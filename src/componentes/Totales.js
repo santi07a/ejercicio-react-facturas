@@ -20,4 +20,5 @@ Totales.propTypes = {
   totalIva: PropTypes.number.isRequired,
   totalTotal: PropTypes.number.isRequired
 };
+
 export default Totales;
