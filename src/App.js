@@ -1,16 +1,14 @@
 import { Col, Container, Form, FormControl, Row, Table, ToastHeader } from "react-bootstrap";
 import Buscador from "./componentes/Buscador";
-
 import Factura from "./componentes/Factura";
 import Totales from "./componentes/Totales";
 import { useEffect, useState } from "react";
 import useFetch from "./hooks/useFetch";
 
-
 function App() {
   const [facturas, setFacturas] = useState([]);
-  const [urlFacturasApi, setUrlFacturasApi] = useState(`${process.env.REACT_APP_API_URL}`);
-  const { datos: facturasAPI } = useFetch(urlFacturasApi);
+  const [urlApi, setUrlApi] = useState(`${process.env.REACT_APP_API_URL}`);
+  const { datos: facturasAPI } = useFetch(urlApi);
   const [totalBase, setTotalBase] = useState(0);
   const [totalIva, setTotalIva] = useState(0);
   const [totalTotal, setTotalTotal] = useState(0);
