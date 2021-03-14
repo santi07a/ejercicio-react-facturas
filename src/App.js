@@ -10,7 +10,7 @@ import Spinner from "./componentes/Spinner";
 function App() {
   const [facturas, setFacturas] = useState([]);
   const [urlApi, setUrlApi] = useState(`${process.env.REACT_APP_API_URL}`);
-  const { datos: facturasAPI } = useFetch(urlApi);
+  const { datos: facturasAPI, spinner: spinnerOn } = useFetch(urlApi);
   const [totalBase, setTotalBase] = useState(0);
   const [totalIva, setTotalIva] = useState(0);
   const [totalTotal, setTotalTotal] = useState(0);
@@ -123,7 +123,7 @@ function App() {
           </Table>
         </main>
       </Container >
-      <Spinner />
+      <Spinner nombreClase={`loading ${spinnerOn}`} />
     </>
   );
 }

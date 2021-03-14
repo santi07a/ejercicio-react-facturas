@@ -1,13 +1,13 @@
 import PropTypes from "prop-types";
 
 const Spinner = props => {
-  const { className } = props;
-  return (<div className={className}>
+  const { nombreClase } = props;
+  return (<div className={nombreClase}>
     <img src="img/loading.svg" alt="cargando" />
   </div>);
 };
 
 Spinner.propTypes = {
-  className: PropTypes.string.isRequired,
+  nombreClase: PropTypes.string.isRequired
 };
 export default Spinner;
