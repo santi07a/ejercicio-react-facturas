@@ -19,10 +19,6 @@ function App() {
       setTotalBase(facturas.map(factura => factura.base).reduce((acc, base) => acc + base));
       setTotalIva(facturas.map(factura => factura.base * (factura.tipoIva / 100)).reduce((acc, iva) => acc + iva));
       setTotalTotal(Math.round(facturas.map(factura => factura.base + factura.base * (factura.tipoIva / 100)).reduce((acc, total) => acc + total) * 100) / 100);
-    } else {
-      setTotalBase(0);
-      setTotalIva(0);
-      setTotalTotal(0);
     }
   }, [facturas]);
 
