@@ -16,6 +16,7 @@ function App() {
   const [totalTotal, setTotalTotal] = useState(0);
   const [busqueda, setBusqueda] = useState("");
   const [noHayFacturas, setNoHayFacturas] = useState(false);
+  const spinnerUrl = "img/loading.svg";
 
   useEffect(() => {
     if (facturas.length > 0) {
@@ -123,7 +124,10 @@ function App() {
           </Table>
         </main>
       </Container >
-      <Spinner nombreClase={`loading ${spinnerOn}`} />
+      <Spinner
+        nombreClase={`loading ${spinnerOn}`}
+        imgUrl={spinnerUrl}
+        altImg="Cargando" />
     </>
   );
 }
