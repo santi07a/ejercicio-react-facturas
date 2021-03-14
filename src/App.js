@@ -45,7 +45,7 @@ function App() {
     const fechaHoy = DateTime.local();
     const fechaVencimiento = DateTime.fromMillis(+vencimiento);
     const diferenciaFechas = fechaVencimiento.diff(fechaHoy, "days").toObject();
-    if (verificaVencimiento(fechaHoy, fechaVencimiento)) {
+    if (verificaVencimiento(vencimiento)) {
       return `${fechaVencimiento.setLocale("es").toLocaleString()} \
       (faltan ${Math.ceil(diferenciaFechas.days)} días)`;
     } else {
