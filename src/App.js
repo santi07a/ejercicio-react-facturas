@@ -5,16 +5,18 @@ import Factura from "./componentes/Factura";
 import Totales from "./componentes/Totales";
 import { useEffect, useState } from "react";
 import useFetch from "./hooks/useFetch";
+import Spinner from "./componentes/Spinner";
 
 function App() {
   const [facturas, setFacturas] = useState([]);
   const [urlApi, setUrlApi] = useState(`${process.env.REACT_APP_API_URL}`);
-  const { datos: facturasAPI } = useFetch(urlApi);
+  const { datos: facturasAPI, spinner: spinnerOn } = useFetch(urlApi);
   const [totalBase, setTotalBase] = useState(0);
   const [totalIva, setTotalIva] = useState(0);
   const [totalTotal, setTotalTotal] = useState(0);
   const [busqueda, setBusqueda] = useState("");
   const [noHayFacturas, setNoHayFacturas] = useState(false);
+  const spinnerUrl = "img/loading.svg";
 
   useEffect(() => {
     if (facturas.length > 0) {
@@ -126,9 +128,10 @@ function App() {
           </Table>
         </main>
       </Container >
-      <div className="loading off">
-        <img src="img/loading.svg" alt="cargando" />
-      </div>
+      <Spinner
+        nombreClase={`loading ${spinnerOn}`}
+        imgUrl={spinnerUrl}
+        altImg="Cargando" />
     </>
   );
 }
