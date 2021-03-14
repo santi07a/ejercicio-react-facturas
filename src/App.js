@@ -28,6 +28,7 @@ function App() {
   useEffect(() => {
     if (facturasAPI) {
       setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
+      setNoHayFacturas(false);
     }
   }, [facturasAPI]);
 
