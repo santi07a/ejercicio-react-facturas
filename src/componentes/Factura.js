@@ -26,7 +26,7 @@ const Factura = (props) => {
 };
 
 Factura.propTypes = {
-  factura: PropTypes.string.isRequired,
+  factura: PropTypes.object.isRequired,
   verificaVencimiento: PropTypes.func.isRequired,
   comprobarVencimiento: PropTypes.func.isRequired
 };
