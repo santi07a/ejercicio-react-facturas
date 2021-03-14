@@ -1,16 +1,14 @@
 import { Col, Container, Form, FormControl, Row, Table, ToastHeader } from "react-bootstrap";
 import Buscador from "./componentes/Buscador";
-
 import Factura from "./componentes/Factura";
 import Totales from "./componentes/Totales";
 import { useEffect, useState } from "react";
 import useFetch from "./hooks/useFetch";
 
-const urlFacturas = "http://localhost:3001/facturas";
-
 function App() {
   const [facturas, setFacturas] = useState([]);
-  const { datos: facturasAPI } = useFetch(urlFacturas);
+  const [urlApi, setUrlApi] = useState(`${process.env.REACT_APP_API_URL}`);
+  const { datos: facturasAPI } = useFetch(urlApi);
   const [totalBase, setTotalBase] = useState(0);
   const [totalIva, setTotalIva] = useState(0);
   const [totalTotal, setTotalTotal] = useState(0);
@@ -21,10 +19,6 @@ function App() {
       setTotalBase(facturas.map(factura => factura.base).reduce((acc, base) => acc + base));
       setTotalIva(facturas.map(factura => factura.base * (factura.tipoIva / 100)).reduce((acc, iva) => acc + iva));
       setTotalTotal(Math.round(facturas.map(factura => factura.base + factura.base * (factura.tipoIva / 100)).reduce((acc, total) => acc + total) * 100) / 100);
-    } else {
-      setTotalBase(0);
-      setTotalIva(0);
-      setTotalTotal(0);
     }
   }, [facturas]);
 
@@ -101,7 +95,7 @@ function App() {
                   key={factura.id}
                   factura={factura}
                   verificaVencimiento={verificaVencimiento}
-                  compruebaVencimiento={comprobarVencimiento}
+                  comprobarVencimiento={comprobarVencimiento}
                 />)
               }
             </tbody>

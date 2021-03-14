@@ -1,8 +1,8 @@
 import { DateTime } from "luxon";
-
+import PropTypes from "prop-types";
 
 const Factura = (props) => {
-  const { factura, verificaVencimiento, compruebaVencimiento } = props;
+  const { factura, verificaVencimiento, comprobarVencimiento } = props;
   return (
     <tr className="factura">
       <td className="numero">{factura.numero}</td>
@@ -20,9 +20,15 @@ const Factura = (props) => {
         className={`vencimiento${factura.abonada ?
           " table-success" :
           (verificaVencimiento(factura.vencimiento) ? " table-success" : " table-danger")}`}
-      >{factura.abonada ? "-" : compruebaVencimiento(factura.vencimiento)}</td>
+      >{factura.abonada ? "-" : comprobarVencimiento(factura.vencimiento)}</td>
     </tr>
   );
+};
+
+Factura.propTypes = {
+  factura: PropTypes.object.isRequired,
+  verificaVencimiento: PropTypes.func.isRequired,
+  comprobarVencimiento: PropTypes.func.isRequired
 };
 
 export default Factura;
