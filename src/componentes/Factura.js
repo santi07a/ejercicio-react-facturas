@@ -11,7 +11,7 @@ const Factura = (props) => {
       <td><span className="base">{factura.base}</span>€</td>
       <td><span
         className="cantidad-iva"
-      >{factura.base * factura.tipoIva / 100}</span>€ (<span className="tipo-iva"></span>%)</td>
+      >{factura.base * factura.tipoIva / 100}</span>€ (<span className="tipo-iva">{factura.tipoIva}</span>%)</td>
       <td><span className="total">{factura.base * (1 + factura.tipoIva / 100)}</span>€</td>
       <td
         className={`estado${factura.abonada ? " table-success" : " table-danger"}`}
